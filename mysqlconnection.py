@@ -1,10 +1,12 @@
 import pymysql.cursors
+from mods.config import *
+
 class MySQLConnection:
     def __init__(self, db):
-        connection = pymysql.connect(host = 'localhost',
-                                    user = 'root', # change the user and password as needed
-                                    password = 'dojo123', 
-                                    db = db,
+        connection = pymysql.connect(host = DB_HOST,
+                                    user = DB_USER, # change the user and password as needed
+                                    password = DB_PASS, 
+                                    db = DB_NAME,
                                     charset = 'utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
@@ -38,5 +40,5 @@ class MySQLConnection:
                 self.connection.close() 
 # this connectToMySQL function creates an instance of MySQLConnection, which will be used by server.py
 # connectToMySQL receives the database we're using and uses it to create an instance of MySQLConnection
-def connectToMySQL(db):
-    return MySQLConnection(db)
+def connectToMySQL(DB_NAME, DB_HOST, DB_USER, DB_PASS):
+    return MySQLConnection(DB_NAME, DB_HOST, DB_USER, DB_PASS)

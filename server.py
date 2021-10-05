@@ -1,40 +1,33 @@
 from mods.config import *
-from flask import Flask, render_template, redirect, request
-from mysqlconnection import MySQLConnection     # import the function that will return an instance of a connection
+from flask import Flask, render_template, request, redirect, url_for
+from mysqlconnection import MySQLConnection
+import os
+from parseCSV import parseCSV
 
 app = Flask(__name__)
 
-# Crear tabla con pgadmin: https://x-team.com/blog/automatic-timestamps-with-postgresql/
-# INSERT INTO public.pets(
-#	name, type)
-#	VALUES ('Laica', 'dog') RETURNING *;
+# Upload folder
+app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
 
 @app.route("/")
 def index():
-    postgres = connectToPostgres(DB_NAME, DB_HOST, DB_USER, DB_PASS)                     # call the function, passing in the name of our db
-    lasMascotasDB = postgres.query_db("SELECT id,name,type FROM pets;")  # call the query_db function, pass in the query as a string
-    print(lasMascotasDB, type(lasMascotasDB))
+    # Set The upload HTML template './templates/index.html'
+    return render_template("index.html")
 
-    return render_template("index.html", pets = lasMascotasDB)
-
-@app.route("/create_pet", methods=["POST"])
-def add_friend_to_db():
-    # QUERY: INSERT INTO first_flask (first_name, last_name, occupation, created_at, updated_at) 
-    #                         VALUES (fname from form, lname from form, occupation from form, NOW(), NOW());
-    #query = "INSERT INTO pets (name, type, created_at, updated_at) VALUES (%(na)s, %(ty)s, NOW(), NOW());"
-    query = """
-        INSERT INTO public.pets(
-        name, type)
-        VALUES (%(na)s, %(ty)s) RETURNING *;
-        """
-    data = {
-        'na': request.form['name'],
-        'ty': request.form['type'],
-    }
-    postgres = connectToPostgres(DB_NAME, DB_HOST, DB_USER, DB_PASS)
-    postgres.query_db(query, data)
-    print(request.form)
-    return redirect("/")
+# Get the uploaded files
+@app.route("/", methods=['POST'])
+def uploadFiles():
+    # Database
+    mydb = MySQLConnection(DB_NAME, DB_HOST, DB_USER, DB_PASS)
+    # get the uploaded file
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # set the file path
+        uploaded_file.save(file_path)
+        parseCSV(file_path, mydb)
+        # save the file
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(debug=True)
