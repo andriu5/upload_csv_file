@@ -10,7 +10,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema Notificaciones_Proactivas
 -- -----------------------------------------------------
--- CREATE SCHEMA IF NOT EXISTS `Notificaciones_Proactivas` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `Notificaciones_Proactivas` DEFAULT CHARACTER SET utf8 ;
 USE `Notificaciones_Proactivas`;
 
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `Notificaciones_Proactivas`.`nomina_usuarios` (
   `fecha_actualizacion` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb3;
+DEFAULT CHARACTER SET = utf8mb4;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
