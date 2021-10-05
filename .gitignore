@@ -28,3 +28,6 @@ post.py
 .env
 .DS_Store
 *.zip
+
+static/files
+static/files/*.xlsx

@@ -20,3 +20,8 @@ h1 {
     color: maroon;
     font-family: 'Cabin', sans-serif;
 }
+
+.formulario {
+    padding: 20px;
+    border: 1px;
+}

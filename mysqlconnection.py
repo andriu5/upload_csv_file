@@ -2,21 +2,21 @@ import pymysql.cursors
 from mods.config import *
 
 class MySQLConnection:
-    def __init__(self, db):
+    def __init__(self):
         connection = pymysql.connect(host = DB_HOST,
                                     user = DB_USER, # change the user and password as needed
-                                    password = DB_PASS, 
+                                    password = DB_PASS,
                                     db = DB_NAME,
-                                    charset = 'utf8mb4',
+                                    charset='utf8mb4',
                                     cursorclass = pymysql.cursors.DictCursor,
                                     autocommit = True)
         self.connection = connection
     def query_db(self, query, data=None):
         with self.connection.cursor() as cursor:
             try:
-                query = cursor.mogrify(query, data)
+                #query = cursor.mogrify(query, data)
                 print("Running Query:", query)
-     
+        
                 executable = cursor.execute(query, data)
                 if query.lower().find("insert") >= 0:
                     # if the query is an insert, return the id of the last row, since that is the row we just added
@@ -35,10 +35,10 @@ class MySQLConnection:
                 # in case the query fails
                 print("Something went wrong", e)
                 return False
-            finally:
-                # close the connection
-                self.connection.close() 
+            # finally:
+            #     # close the connection
+            #     self.connection.close()
 # this connectToMySQL function creates an instance of MySQLConnection, which will be used by server.py
 # connectToMySQL receives the database we're using and uses it to create an instance of MySQLConnection
-def connectToMySQL(DB_NAME, DB_HOST, DB_USER, DB_PASS):
-    return MySQLConnection(DB_NAME, DB_HOST, DB_USER, DB_PASS)
+def connectToMySQL():
+    return MySQLConnection()
