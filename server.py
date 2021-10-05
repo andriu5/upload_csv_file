@@ -1,6 +1,6 @@
 from mods.config import *
 from flask import Flask, render_template, redirect, request
-from postgresconnection import connectToPostgres              # import the function that will return an instance of a connection
+from mysqlconnection import MySQLConnection     # import the function that will return an instance of a connection
 
 app = Flask(__name__)
 
